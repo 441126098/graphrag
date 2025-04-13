@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "my-graphrag"
+version = "0.1.0"
+description = "A Python project"
+authors = ["Your Name"]
+readme = "README.md"
+packages = [{include = "graphrag"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+graphrag = "2.1.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+priority = "primary"
+
+[tool.poetry.group.dev.dependencies]
+requests = "^2.32.3"
+pytest = "^8.3.5"
+
+[tool.poetry.scripts]
+start = "graphrag.app:main"
+test = "pytest:main"
+lint = "pylint:run_pylint"
+
