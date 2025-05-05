@@ -36,4 +36,11 @@ ENV/
 # Testing
 .coverage
 .pytest_cache/
-htmlcov/ 
+htmlcov/
+
+# UV
+.uv/
+.venv-uv/ 
+
+# 忽略graphrag文件夹
+graphrag/

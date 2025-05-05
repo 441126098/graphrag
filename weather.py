@@ -1,18 +1,17 @@
 from typing import Any
 import httpx
 from mcp.server.fastmcp import FastMCP
+
 # 初始化FastMCP服务器
 mcp = FastMCP("weather")
 # 常量
 NWS_API_BASE = "https://api.weather.gov"
 USER_AGENT = "weather-app/1.0"
 
+
 async def make_nws_request(url: str) -> dict[str, Any] | None:
     """向NWS API发出GET请求，处理错误并返回JSON响应"""
-    headers = {
-        "User-Agent": USER_AGENT,
-        "Accept": "application/geo+json"
-    }
+    headers = {"User-Agent": USER_AGENT, "Accept": "application/geo+json"}
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(url, headers=headers, timeout=30.0)
@@ -20,6 +19,8 @@ async def make_nws_request(url: str) -> dict[str, Any] | None:
             return response.json()
         except Exception:
             return None
+
+
 def format_alert(feature: dict) -> str:
     """将警报特征格式化为可读字符串。"""
     props = feature["properties"]
@@ -30,6 +31,7 @@ Severity: {props.get('severity', 'Unknown')}
 Description: {props.get('description', 'No description available')}
 Instructions: {props.get('instruction', 'No specific instructions provided')}
 """
+
 
 @mcp.tool()
 async def get_alerts(state: str) -> str:
@@ -42,6 +44,7 @@ async def get_alerts(state: str) -> str:
         return "该州没有活动警报。"
     alerts = [format_alert(feature) for feature in data["features"]]
     return "\n---\n".join(alerts)
+
 
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float) -> str:
@@ -73,6 +76,7 @@ Forecast: {period['detailedForecast']}
         forecasts.append(forecast)
     return "\n---\n".join(forecasts)
 
+
 if __name__ == "__main__":
     # 初始化并运行服务器
-    mcp.run(transport='stdio')
+    mcp.run(transport="stdio")
